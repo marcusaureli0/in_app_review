@@ -163,10 +163,10 @@ public class InAppReviewPlugin implements FlutterPlugin, MethodCallHandler, Acti
 
         final ReviewManager manager = ReviewManagerFactory.create(context);
 
-        if (reviewInfo != null) {
-            launchReviewFlow(result, manager, reviewInfo);
-            return;
-        }
+//        if (reviewInfo != null) {
+//            launchReviewFlow(result, manager, reviewInfo);
+//            return;
+//        }
 
         final Task<ReviewInfo> request = manager.requestReviewFlow();
 
@@ -189,7 +189,12 @@ public class InAppReviewPlugin implements FlutterPlugin, MethodCallHandler, Acti
         if (noContextOrActivity(result)) return;
 
         Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
-        flow.addOnCompleteListener(task -> result.success(null));
+        flow.addOnCompleteListener(task -> {
+            Log.i(TAG, "launchReviewFlow isComplete: " + task.isComplete());
+            Log.i(TAG, "launchReviewFlow isSuccessful: " + task.isSuccessful());
+            Log.i(TAG, "launchReviewFlow isCancelled: " + task.isCanceled());
+            result.success(null);
+        });
     }
 
     @SuppressWarnings("deprecation")
